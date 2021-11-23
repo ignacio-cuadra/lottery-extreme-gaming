@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/css/among-us.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    
+    <title>Among Us Lottery</title>
+</head>
+<body>
+    <div id = "app">
+        <div id = "wrapper">
+            <img src="src/img/logo.png" alt="" height="150px" style = "margin: 0 auto; display: block;margin-top: -100px;">
+            <h1>Among Us Lottery</h1>
+            <div id = "steps">
+                <div id = "step-1">
+                    <div id = "input-contestants-panel">
+                        <label for="">Pega aquí tu lista de participantes:</label>
+                        <textarea id = "contestants-input" ></textarea>
+                        <div style = "display: flex;">
+                            <span id = "error" class = "error" style = "width: 100%;opacity: 0;"><i class = "fas fa-exclamation-triangle" ></i> Debes tener al menos dos concursantes</span>
+                            <button style = "white-space:nowrap" onclick="loadContestants()">Cargar Participantes</button>
+                        </div>
+                    </div>
+                    <div id = "info-panel">
+                        <h2>Among Us Lottery</h2>
+                        <p class = "mb-1 align-justify">Among Us Loterry te permite sacrificar a tus concursantes uno a uno, hasta que solo quede el mejor.</p>
+                        <h3>Modos</h3>
+                        <p class = "align-justify"><b>Eliminación por vidas:</b> La eliminación por vidas se realiza en base a la cantidad de vidas de cada concursante. <i>De esta forma todos tienen las mismas oportunidades de ganar</i></p>
+                        <p class = "mb-1 align-justify"><b>Eliminación por nombre:</b> La eliminación por nombre se realiza en base a la cantidad de concursantes, si un concursante sale seleccionado se le quita una vida, de tener 0 vidas muere.</p>
+                        <h3>Otras características</h3>
+                        <p class = "align-justify">No importa si seleccionas la opción eliminar todos, siempre quedará un concursante de pie</p>
+                        <p class = "align-justify">Se mantiene un historial de daños y muertes de cada concursante (visible en todo momento)</p>
+                        <p class = "align-justify">Al finalizar la lotería podras usar la opción "resucitar" para asesinar al ganador y devolver la vida al siguiente más apto.</p>
+                    </div>
+                </div>
+                <div id = "step-2" style = "display: none;">
+                    <div id = "contestants-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th width = "100px">Vidas</th>
+                                </tr>
+                            </thead>
+                            <tbody id = "contestants-table-body">
+                                <tr>
+                                    <td>Nombre</td>
+                                    <td>••••</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <canvas id = "game" width = "640" height="480">
+
+                    </canvas>
+                    <div id = "right-panel">
+                        <div id = "control-panel">
+                            <div id = "options">
+                                <select id="elimination-type-input">
+                                    <option value="HEALTH_DELETING" selected>Eliminación por vidas</option>
+                                    <option value="NAME_DELETING">Eliminación por nombres</option>
+                                </select>
+                                <select id="eliminations-amount-input">
+                                    <option value="1" selected>Eliminar 1</option>
+                                    <option value="2">Eliminar 2</option>
+                                    <option value="3">Eliminar 3</option>
+                                    <option value="4">Eliminar 4</option>
+                                    <option value="5">Eliminar 5</option>
+                                    <option value="99999999">Eliminar Todos</option>
+                                </select>
+                            </div>
+                            <button id = "eliminate" onclick = "eliminate()">Eliminar</button>
+                            <button id = "resurrect" style = "display: none" onclick = "resurrect()">Resucitar</button>
+                        </div>
+                        <div id = "historial">
+                            <div class = "historial-item">
+                                <div>
+                                    <span>Nombre</span>
+                                    <i class="ml-2 fas fa-heart-broken"></i>
+                                    <!-- i class = "ml-2 fas fa-skull-crossbones"></i -->
+                                </div>
+                                <small>Forma en que murió o sobrevivió</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <img id = "sprites" style = "display: none" src="src/img/among-us.png" alt="">
+    <img id = "background" style = "display: none" src="src/img/among-us-background.png" alt="">
+    <script src = "src/js/among-us.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="src/css/index.css">
+    <script src = "src/js/index.js"></script>
+</head>
+<body class = "bg-gray-700 flex justify-center content-center items-center h-full w-full">
+    <div id="app" class = "w-9/12 hidden" :style = "(!loading)? 'display:block !important' : ''">
+        <h1 class = "font-press-start text-gray-100 text-4xl my-4 block text-center">LOTTERY EXTREME GAMING</h1>
+
+        
+        <div v-if = "step == '0'" class = "bg-gray-800  p-5"> 
+            <label for="" class = "block text-gray-400" >Pega aquí tu lista concursantes:</label>
+            <textarea class = "block bg-gray-900 text-white w-full my-2 p-2" v-model = "contestantsInput" name="" id="" cols="30" rows="10"></textarea>
+            <div class = "text-right">
+                <button :disabled = "contestantsInput.length == 0" class = "bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 border-b-4 border-blue-900 hover:border-blue-700 rounded" @click = "load()">Cargar Concursantes</button>
+            </div>
+        </div>
+        
+        <div class = "bg-gray-800 p-5 flex" v-if = "step == 1">
+            
+ 
+            <div class = "overflow-y-scroll px-2" style = "height: 400px;min-width: 300px;">
+                <table>
+                    <thead class = "sticky top-0 bg-gray-800">
+                        <tr>
+                            <th class = "text-white py-2">Concursante</th> <th class = "text-white py-2">Vidas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for = "contestant in contestants">
+                            <td class = "text-white px-2 " ><span class = "overflow-ellipsis block overflow-hidden" style = "max-width: 150px;">{{contestant.name}}</span> </td>
+                            <td class = "px-2">
+                                
+                                <i v-if = "contestant.health < 6" v-for = "h in contestant.health" class = "fas fa-heart text-red-500"></i>
+                                <div v-if = "contestant.health > 5">
+                                    <i class = "fas fa-heart text-red-500"></i><span class = "text-white font-bold">x{{contestant.health}}</span>
+                                </div>
+                            
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class = "ml-5 w-full">
+                <div class="flex w-full">
+                    <select class = "bg-gray-900 text-white px-2" v-model = "eliminatorMode" name="" id="">
+                        <option value="mode0" selected>Eliminatorias</option>
+                        <option value="mode1">Eliminatorias Estadísticamente Cuestionables</option>
+                    </select>
+
+                    <select class = "bg-gray-900 text-white w-full px-2" v-model = "eliminatorInput" name="" id="">
+                        <option value="1">Muerte por Oscuridad</option>
+                        <option value="2" selected>Muerte por Perros</option>
+                        <option value="3">Muerte por Locura</option>
+                        <option value="4">Muerte por Lag</option>
+                        <option value="5">M. Dinamitar Cultivos</option>
+                    </select>
+                    <button class = "bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 border-b-4 border-blue-900 hover:border-blue-700 rounded" style = "min-width: 150px;" @click = "eliminator()">Bonk {{eliminatorInput}}</button>
+                </div>
+                <div class = "w-full block overflow-y-auto mt-2" style = "height: 350px;">
+                    <div v-for = "contestant in historial.slice().reverse()" class = "flex w-full text-white text-3xl p-2 bg-gray-900 mb-2">
+                        <span class = "w-full overflow-ellipsis overflow-hidden">{{contestant.name}}</span>
+                        <i v-if = "!contestant.isDead" class="ml-2 fas fa-heart-broken "></i>
+                        <i v-if = "contestant.isDead" class = "ml-2 fas fa-skull-crossbones"></i>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        
+
+        <div v-if = "step == 2" class = "">
+            <h2 class = "font-press-start text-gray-100 text-2xl my-4 block text-center">Ganador(a)</h2>
+            <h3 class = "font-press-start text-blue-300 text-8xl my-4 block text-center pt-8">{{contestants[0].name}}</h3>
+            <div class = "w-full block overflow-y-auto mt-2" style = "height: 350px;">
+                <div class = "flex w-full text-white text-3xl p-2 bg-gray-900 mb-2">
+                    <span class = "w-full overflow-ellipsis overflow-hidden">{{contestants[0].name}}</span>
+                    <i class="ml-2 fas fa-trophy"></i>
+                </div>
+                <div v-for = "contestant in historial.slice().reverse()" class = "flex w-full text-white text-3xl p-2 bg-gray-900 mb-2">
+                    <span class = "w-full overflow-ellipsis overflow-hidden">{{contestant.name}}</span>
+                    <i v-if = "!contestant.isDead" class="ml-2 fas fa-heart-broken "></i>
+                    <i v-if = "contestant.isDead" class = "ml-2 fas fa-skull-crossbones"></i>
+                </div>
+            </div>
+        </div>
+        <div class = "text-center my-4">
+            <button class = "bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 border-b-4 border-blue-900 hover:border-blue-700 rounded" @click = "reset">Reiniciar</button>
+            <small class = "block text-gray-400 mt-2">Para usar el sitio se recomienda quitar la extensión de traductor</small>
+        </div>
+    </div>
+</body>
+</html>
